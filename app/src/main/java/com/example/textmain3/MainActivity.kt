@@ -1,5 +1,7 @@
 package com.example.textmain3
 
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -63,7 +65,6 @@ fun page_main(name: String, modifier: Modifier = Modifier) {
                 .fillMaxHeight()
         )
         {
-
             OutlinedTextField(
                 modifier = Modifier.weight(50F),
                 value = state_before,
@@ -82,7 +83,12 @@ fun page_main(name: String, modifier: Modifier = Modifier) {
                 .width(100.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Button(onClick = {}){ Text(text = "붙넣")}
+            val cb_context = LocalContext.current
+            Button(onClick = {
+                val clipboard_manager = cb_context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val text_got = clipboard_manager.primaryClip?.getItemAt(0)?.text?.toString()?:""
+                set_state_before(text_got)
+            }){ Text(text = "붙넣")}
             repeat(30) {
                 Button(onClick = {}) {
                     Text(text = "${it+1}")
